@@ -2,9 +2,17 @@
 #include <string.h>
 #include <math.h>
 
+/**
+ *--description--
+ *Programme pour calculer l'aire et le perimetre d'un cercle
+ *a partir du rayon entré par un utilisateur
+ *--
+ */
+
+
 int main() {
     double rayon;
-    printf("Entrez le rayon de votre cercle et je vous donnerais son aire et son perimetre\n"
+    printf("Entrez le rayon de votre cercle et je vous donnerais son aire et son perimetre.\n"
            "rayon en [mm] =");
 
     scanf("%lf", &rayon);
