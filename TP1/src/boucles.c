@@ -12,7 +12,11 @@ int main()
     {
         for (j = 0; j <= i; j++) // deuxieme boucle 'for' pour le nombres d'etoiles par lignes
         {
-            printf("*");
+            if (j == 0 || j == i || i == compteur-1) { //On rajoute une condition pour faire en sort que nous ayons des # a coeur du triangle.
+                printf("* ");
+            } else {
+                printf("# ");
+            }
         }
         printf("\n"); // on oublie pas de sauter une ligne...
     }
