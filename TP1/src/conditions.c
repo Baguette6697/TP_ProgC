@@ -21,10 +21,10 @@ int main()
         }
         if (somme>5000)
         {
-            break;
+            break; // cassage de la boucle
         }
 
     }
-    printf("somme final=%d", somme);
+    printf("somme final=%d", somme); // affichage de la somme final apres cassage de la boucle
     return 0;
 }
