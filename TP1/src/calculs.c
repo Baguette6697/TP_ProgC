@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdbool.h>
 
 
 int main()
@@ -39,12 +40,12 @@ int main()
             return result;
 
         case '&':
-            int result = num1&num2;
+            bool result = num1&num2;
             printf("%d&%d=%d",num1, num2, result);
             return result;
 
         case '|':
-            int result = num1|num2;
+            bool result = num1|num2;
             printf("%d|%d=%d",num1, num2, result);
             return result;
 
