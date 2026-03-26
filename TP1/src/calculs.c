@@ -1,61 +1,66 @@
 #include <stdio.h>
-#include <stdbool.h>
 
-
-int main()
-{
-    int num1;
-    int num2;
+int main() {
+    int num1, num2, result;
     char op;
 
-    printf("Rentrez au clavier le type d'operation que vous voudriez faire : \n options :'+', '-', '*', '/', '%', '&', '|', '~'");
-    scanf("\n %c", &op);
+    printf("Opération (+, -, *, /, %%, &, |, ~) : ");
+    if (scanf(" %c", &op) != 1) return 1;
 
-    printf("Rentrez le premier nombre au clavier puis appuyez sur 'enter' :");
-    scanf("\n %d", &num1);
+    printf("Premier nombre : ");
+    if (scanf("%d", &num1) != 1) return 1;
 
-    printf("Rentrez le second nombre au clavier puis appuyez sur 'enter' :");
-    scanf("\n %d", &num2);
-
-    switch (op)
-    {
-        case '+':
-            int result = num1+num2;
-            printf("%d+%d=%d",num1, num2, result);
-            return result;
-
-        case '-':
-            int result = num1-num2;
-            printf("%d-%d=%d",num1, num2, result);
-            return result;
-
-        case '*':
-            int result = num1*num2;
-            printf("%d*%d=%d",num1, num2, result);
-            return result;
-
-        case '/':
-            int result = num1/num2;
-            printf("%d/%d=%d",num1, num2, result);
-            return result;
-
-        case '&':
-            bool result = num1&num2;
-            printf("%d&%d=%d",num1, num2, result);
-            return result;
-
-        case '|':
-            bool result = num1|num2;
-            printf("%d|%d=%d",num1, num2, result);
-            return result;
-
-        case '~':
-            int result = num1~num2;
-            printf("%d~%d=%d",num1, num2, result);
-            return result;
-
-        default:
-            printf("\n Operation impossible. Veuillez reessayer. \n *attention!* \n la fonction n'accepte que des nombres entier.");
+    // L'opérateur ~ est unaire (ne prend qu'un argument)
+    if (op != '~') {
+        printf("Second nombre : ");
+        if (scanf("%d", &num2) != 1) return 1;
     }
+
+    switch (op) {
+        case '+':
+            result = num1 + num2;
+            printf("%d + %d = %d\n", num1, num2, result);
+            break;
+        case '-':
+            result = num1 - num2;
+            printf("%d - %d = %d\n", num1, num2, result);
+            break;
+        case '*':
+            result = num1 * num2;
+            printf("%d * %d = %d\n", num1, num2, result);
+            break;
+        case '/':
+            if (num2 != 0) {
+                result = num1 / num2;
+                printf("%d / %d = %d\n", num1, num2, result);
+            } else {
+                printf("Erreur : Division par zéro !\n");
+            }
+            break;
+        case '%':
+            if (num2 != 0) {
+                result = num1 % num2;
+                printf("%d %% %d = %d\n", num1, num2, result);
+            } else {
+                printf("Erreur : Modulo par zéro !\n");
+            }
+            break;
+        case '&':
+            result = num1 & num2;
+            printf("%d & %d = %d\n", num1, num2, result);
+            break;
+        case '|':
+            result = num1 | num2;
+            printf("%d | %d = %d\n", num1, num2, result);
+            break;
+        case '~':
+            result = ~num1;
+            printf("~%d = %d\n", num1, result);
+            break;
+        default:
+            printf("Erreur : Opérateur '%c' non reconnu.\n", op);
+            break;
+    }
+
     return 0;
 }
