@@ -25,7 +25,7 @@ int main() {
         "8 Rue de la Paix, 44000 Nantes"
     };
 
-    // 3. Deux tableaux pour les notes dans les deux modules
+    // 3. Deux tableau pour les notes dans les deux modules
     float notes_programmation[5] = {16.5, 14.0, 18.5, 12.0, 15.5};
     float notes_systeme[5] = {14.5, 13.0, 17.0, 15.0, 16.0};
 
