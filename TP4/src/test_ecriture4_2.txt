@@ -1,0 +1,1 @@
+J'ai essayer d'ecrire un fichier texte avec mon script et ca a marcher. Youpi!

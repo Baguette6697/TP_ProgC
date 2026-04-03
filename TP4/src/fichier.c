@@ -7,25 +7,26 @@ void lire_fichier(const char *filename) {
     FILE *fptr = fopen(filename, "r");
     char buffer[255];
     if (fptr == NULL) {
-        perror("Error");
+        perror("Erreur");
         return;
     }
-    printf("\n--- Reading %s ---\n", filename);
+    printf("\n--- Lecture de %s ---\n", filename);
     while (fgets(buffer, sizeof(buffer), fptr)) {
         printf("%s", buffer);
     }
+    printf("\n--- Fin du fichier ---\n");
     fclose(fptr);
 }
 
 void ecrire_dans_fichier(const char *filename, const char *content) {
     FILE *fptr = fopen(filename, "w");
     if (fptr == NULL) {
-        perror("Error");
+        perror("Erreur");
         return;
     }
     fputs(content, fptr);
     fclose(fptr);
-    printf("Action completed: Data written to %s\n", filename);
+    printf("Action enregistre: fichier sauvegarder avec le nom %s\n", filename);
 }
 
 //---------------------------------------------------
