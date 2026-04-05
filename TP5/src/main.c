@@ -17,7 +17,8 @@ int main(int argc, char *argv[]) {
     printf("Répertoire cible : %s\n", nom_repertoire);
     printf("1. Liste simple (fichiers au premier niveau)\n");
     printf("2. Liste récursive (inclure tous les sous-dossiers)\n");
-    printf("3. Quitter\n");
+    printf("3. Liste itérative de fichiers et répertoires dans un dossier\n");
+    printf("4. Quitter\n");
     printf("Votre choix : ");
 
     // Lecture du choix de l'utilisateur
@@ -39,6 +40,10 @@ int main(int argc, char *argv[]) {
         lire_dossier_recursif(nom_repertoire);
         break;
     case 3:
+        printf("Liste itérative de fichiers :\n");
+        lire_dossier_recursif(nom_repertoire);
+        break;
+    case 4:
         printf("Au revoir !\n");
         break;
     default:
