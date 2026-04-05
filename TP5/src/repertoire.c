@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <dirent.h> // Indispensable pour opendir et readdir
 #include "repertoire.h"
+#include <string.h>
 
 void lire_dossier(const char *nom_repertoire) {
     // 1. Déclarer un pointeur vers le dossier et une structure pour les entrées
