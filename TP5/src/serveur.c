@@ -49,14 +49,18 @@ int renvoie_message(int client_socket_fd, char *data)
  */
 int recois_envoie_message(int client_socket_fd, char *data)
 {
-  printf("Message reçu: %s\n", data);
-  char code[10];
-  if (sscanf(data, "%9s:", code) == 1) // Assurez-vous que le format est correct
+  printf("Message reçu du client : %s\n", data);
+
+  char reponse_serveur[1024];
+
+  // 1. Demander à l'utilisateur du serveur de saisir un message
+  printf("Votre réponse au client : ");
+
+  // 2. Lire la saisie clavier (stdin)
+  if (fgets(reponse_serveur, sizeof(reponse_serveur), stdin) != NULL)
   {
-    if (strcmp(code, "message:") == 0)
-    {
-      return renvoie_message(client_socket_fd, data);
-    }
+    // 3. Envoyer cette saisie au client au lieu de 'data'
+    return renvoie_message(client_socket_fd, reponse_serveur);
   }
 
   return (EXIT_SUCCESS);
