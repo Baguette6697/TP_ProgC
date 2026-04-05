@@ -41,7 +41,7 @@ int main(int argc, char *argv[]) {
         break;
     case 3:
         printf("Liste itérative de fichiers :\n");
-        lire_dossier_recursif(nom_repertoire);
+        lire_dossier_iteratif(nom_repertoire);
         break;
     case 4:
         printf("Au revoir !\n");
