@@ -34,6 +34,7 @@ int envoie_recois_message(int socketfd) {
   // Si l'entrée correspond au format de calcul
   if (sscanf(message, "calcule : %c %d %d", &op, &n1, &n2) == 3) {
     envoie_operateur_numeros(socketfd, op, n1, n2);
+    envoie_operateur_numeros(socketfd, op, n1, n2);
   } else {
     // Sinon, envoi standard
     snprintf(data, sizeof(data), "message: %s", message);
@@ -50,16 +51,52 @@ int envoie_recois_message(int socketfd) {
 
 
 //-------Calcul pour exo5.5---------------
-int envoie_operateur_numeros(int socketfd, char op, int n1, int n2) {
-  char data[1024];
-  // Formate la chaîne : "calcule : + 23 45"
-  snprintf(data, sizeof(data), "calcule : %c %d %d", op, n1, n2);
+// Aide pour envoyer le calcul et récupérer le résultat entier
+int demander_calcul_au_serveur(int socketfd, char op, int n1, int n2) {
+  char buffer[1024];
+  int resultat;
 
-  if (write(socketfd, data, strlen(data)) < 0) {
-    perror("Erreur d'écriture calcul");
-    return -1;
+  // Envoi au format : "calcule : 23 + 45"
+  snprintf(buffer, sizeof(buffer), "calcule : %d %c %d", n1, op, n2);
+  write(socketfd, buffer, strlen(buffer));
+
+  // Réception du résultat
+  memset(buffer, 0, sizeof(buffer));
+  read(socketfd, buffer, sizeof(buffer));
+
+  // Extraction du nombre depuis "Résultat : 68"
+  sscanf(buffer, "Résultat : %d", &resultat);
+  return resultat;
+}
+
+void traiter_tous_les_etudiants(int socketfd) {
+  int note_lue;
+  char chemin[64];
+
+  for (int i = 1; i <= 5; i++) { // Boucle étudiants 1 à 5
+    int somme_actuelle = 0;
+    printf("--- Calcul pour l'étudiant %d ---\n", i);
+
+    for (int j = 1; j <= 5; j++) { // Boucle notes 1 à 5
+      sprintf(chemin, "etudiant/%d/note%d.txt", i, j);
+      FILE *f = fopen(chemin, "r");
+      if (f == NULL) continue;
+
+      fscanf(f, "%d", &note_lue);
+      fclose(f);
+
+      // Au premier passage, la somme est juste la note, sinon on additionne via le serveur
+      if (j == 1) {
+        somme_actuelle = note_lue;
+      } else {
+        somme_actuelle = demander_calcul_au_serveur(socketfd, '+', somme_actuelle, note_lue);
+      }
+    }
+
+    // Une fois les 5 notes sommées, on demande la division pour la moyenne
+    int moyenne = demander_calcul_au_serveur(socketfd, '/', somme_actuelle, 5);
+    printf("Somme totale : %d | Moyenne calculée par le serveur : %d\n\n", somme_actuelle, moyenne);
   }
-  return 0;
 }
 
 int main()

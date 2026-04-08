@@ -47,15 +47,19 @@ int renvoie_message(int client_socket_fd, char *data)
  * @param data : Le message.
  * @return EXIT_SUCCESS en cas de succès, EXIT_FAILURE en cas d'erreur.
  */
-int recois_envoie_message(int client_socket_fd, char *data) {
-  printf("Données reçues: %s\n", data);
-
-  if (strncmp(data, "calcule :", 9) == 0) {
+int recois_envoie_message(int client_socket_fd, char *data)
+{
+  // 1. On vérifie d'abord si c'est une demande de calcul
+  if (strncmp(data, "calcule :", 9) == 0)
+  {
+    // On appelle la fonction spécifique aux calculs
     return recois_numeros_calcule(client_socket_fd, data);
   }
-  else if (strncmp(data, "message:", 8) == 0) {
-    // Optionnel : demander une saisie manuelle comme dans l'étape précédente
-    // ou simplement renvoyer le message reçu.
+  // 2. Sinon, on vérifie si c'est un message texte standard
+  else if (strncmp(data, "message:", 8) == 0)
+  {
+    printf("Message texte reçu : %s\n", data);
+    // Ici, on peut soit faire un echo, soit demander une réponse manuelle
     return renvoie_message(client_socket_fd, data);
   }
 
@@ -119,29 +123,18 @@ void gerer_client(int client_socket_fd)
 }
 
 int recois_numeros_calcule(int client_socket_fd, char *data) {
+  int n1, n2, res = 0;
   char op;
-  int n1, n2, resultat = 0;
   char reponse[1024];
 
-  // Extraction des données : "calcule : + 23 45"
-  if (sscanf(data, "calcule : %c %d %d", &op, &n1, &n2) == 3) {
-    switch (op) {
-    case '+': resultat = n1 + n2; break;
-    case '-': resultat = n1 - n2; break;
-    case '*': resultat = n1 * n2; break;
-    case '/':
-      if (n2 != 0) resultat = n1 / n2;
-      else {
-        renvoie_message(client_socket_fd, "Erreur: Division par zéro");
-        return EXIT_FAILURE;
-      }
-      break;
-    default:
-      renvoie_message(client_socket_fd, "Erreur: Opérateur inconnu");
-      return EXIT_FAILURE;
-    }
+  // Analyse de "calcule : 10 + 20"
+  if (sscanf(data, "calcule : %d %c %d", &n1, &op, &n2) == 3) {
+    if (op == '+') res = n1 + n2;
+    else if (op == '-') res = n1 - n2;
+    else if (op == '*') res = n1 * n2;
+    else if (op == '/') res = (n2 != 0) ? n1 / n2 : 0;
 
-    snprintf(reponse, sizeof(reponse), "calcule : %d", resultat);
+    snprintf(reponse, sizeof(reponse), "Résultat : %d", res);
     return renvoie_message(client_socket_fd, reponse);
   }
   return EXIT_FAILURE;
