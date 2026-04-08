@@ -21,45 +21,45 @@
  * @param socketfd Le descripteur de la socket utilisée pour la communication.
  * @return 0 en cas de succès, -1 en cas d'erreur.
  */
-int envoie_recois_message(int socketfd)
-{
+int envoie_recois_message(int socketfd) {
+  char message[1024];
   char data[1024];
-
-  // Réinitialisation de l'ensemble des données
   memset(data, 0, sizeof(data));
 
-  // Demande à l'utilisateur d'entrer un message
-  char message[1024];
-  printf("Votre message (max 1000 caractères): ");
+  printf("Votre message ou calcule (ex: calcule : + 23 45): ");
   fgets(message, sizeof(message), stdin);
 
-  // Construit le message avec une étiquette "message: "
-  strcpy(data, "message: ");
-  strcat(data, message);
-
-  // Envoie le message au client
-  int write_status = write(socketfd, data, strlen(data));
-  if (write_status < 0)
-  {
-    perror("Erreur d'écriture");
-    return -1;
+  char op;
+  int n1, n2;
+  // Si l'entrée correspond au format de calcul
+  if (sscanf(message, "calcule : %c %d %d", &op, &n1, &n2) == 3) {
+    envoie_operateur_numeros(socketfd, op, n1, n2);
+  } else {
+    // Sinon, envoi standard
+    snprintf(data, sizeof(data), "message: %s", message);
+    write(socketfd, data, strlen(data));
   }
 
-  // Réinitialisation de l'ensemble des données
+  // Lecture de la réponse (résultat ou echo)
   memset(data, 0, sizeof(data));
+  read(socketfd, data, sizeof(data));
+  printf("Réponse reçue: %s\n", data);
 
-  // Lit les données de la socket
-  int read_status = read(socketfd, data, sizeof(data));
-  if (read_status < 0)
-  {
-    perror("Erreur de lecture");
+  return 0;
+}
+
+
+//-------Calcul pour exo5.5---------------
+int envoie_operateur_numeros(int socketfd, char op, int n1, int n2) {
+  char data[1024];
+  // Formate la chaîne : "calcule : + 23 45"
+  snprintf(data, sizeof(data), "calcule : %c %d %d", op, n1, n2);
+
+  if (write(socketfd, data, strlen(data)) < 0) {
+    perror("Erreur d'écriture calcul");
     return -1;
   }
-
-  // Affiche le message reçu du client
-  printf("Message reçu: %s\n", data);
-
-  return 0; // Succès
+  return 0;
 }
 
 int main()
